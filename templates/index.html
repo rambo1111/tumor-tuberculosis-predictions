@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-ray Analysis Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Tumor and Tuberculosis Detection</h1>
+        
+        <form id="upload-form" class="analysis-form">
+            <div class="form-group">
+                <label for="xray-type">Select X-ray Type</label>
+                <select id="xray-type" name="xray_type">
+                    <option value="brain">Brain MRI</option>
+                    <option value="chest">Chest X-ray</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="model-type">Select Model</label>
+                <select id="model-type" name="model_type">
+                    <option value="AlexNet">AlexNet</option>
+                    <option value="GoogleNet">GoogleNet</option>
+                    <option value="LeNet-5">LeNet-5</option>
+                    <option value="VGGNet">VGGNet</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="file-upload">Upload X-ray Image</label>
+                <input type="file" id="file-upload" name="file" accept="image/*">
+            </div>
+            
+            <button type="submit" class="submit-btn">Analyze the Image</button>
+        </form>
+
+        <div id="result" class="result-container hidden">
+            <h2>Analysis Result</h2>
+            <p id="result-text"></p>
+        </div>
+
+        <div class="description">
+            <h3>About This Tool</h3>
+            <p>
+                This X-ray Analysis Tool allows medical professionals to quickly analyze Brain MRI and Chest X-ray images using state-of-the-art machine learning models. Users can select from four different models (AlexNet, GoogleNet, LeNet-5, VGGNet) for predictions. The app preprocesses the uploaded image, uses the selected model to make a prediction, and displays the result, aiding in the detection of tumors and tuberculosis.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('/upload', { method: 'POST', body: formData });
+            const result = await response.json();
+            
+            if (result.error) {
+                alert(result.error);
+            } else {
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('result-text').textContent = `Prediction: ${result.predicted_class} (${result.xray_type} X-ray, ${result.model_type} model)`;
+            }
+        });
+    </script>
+</body>
+</html>
