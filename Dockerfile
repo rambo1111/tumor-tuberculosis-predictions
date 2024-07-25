@@ -8,7 +8,7 @@ RUN git lfs install
 WORKDIR /app
 
 # Clone the repository
-RUN git clone https://github.com/yourusername/your-repo.git .
+RUN git clone https://github.com/rambo1111/tumor-tuberculosis-predictions.git .
 RUN git lfs pull
 
 # Install dependencies
